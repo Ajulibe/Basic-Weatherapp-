@@ -11,8 +11,8 @@ import CoreLocation
 
 protocol WeatherManagerDelegate {
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel)
-  
-   
+    func didFailWithError(error: Error)
+    
 }
 
 struct WeatherManager {
@@ -46,7 +46,7 @@ struct WeatherManager {
             //--> i.e ({$0, $1}) look up closure if confused
             let task = session.dataTask(with: url) { (data, response, error) in
                 if error != nil {
-//                    self.delegate?.didFailWithError(error: error!)
+                    self.delegate?.didFailWithError(error: error!)
                     return
                 }
                 if let safeData = data {
@@ -73,7 +73,7 @@ struct WeatherManager {
     
     //--> converting the data to a JSON format to be readable
     func parseJSON(_ weatherData: Data) -> WeatherModel? {
-    //--> this is the swift standard way of converting an API response to JSON
+        //--> this is the swift standard way of converting an API response to JSON
         //--> 1) call the JSONDecoder class, You can option + click JSONDecoder() to see an example
         let decoder = JSONDecoder()
         //--> 2) Tell the class to decode the weatherData argument using the WeatherData struct
